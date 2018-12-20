@@ -4,9 +4,7 @@ package com.shy.company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +42,20 @@ public class CompanyController {
 
     //https://www.logicbig.com/tutorials/spring-framework/spring-hateoas/multiple-link-relations.html
     //use only one company object (no resource) ?
+
+    /*
+    https://github.com/spring-projects/spring-hateoas-examples/blob/master/api-evolution/original-server/src/main/java/org/springframework/hateoas/examples/EmployeeController.java
+    @GetMapping(value = "/", produces = MediaTypes.HAL_JSON_VALUE)
+    public ResourceSupport root() {
+
+        ResourceSupport rootResource = new ResourceSupport();
+
+        rootResource.add(
+                linkTo(methodOn(CompanyController.class).root()).withSelfRel(),
+                linkTo(methodOn(CompanyController.class).findAll()).withRel("employees"));
+
+        return rootResource;
+    }*/
 
     @GetMapping("/all")
     ResponseEntity<Resources<Resource<CompanyResource>>> all() {
