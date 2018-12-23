@@ -23,8 +23,6 @@ public class DatabaseInitializer implements ApplicationRunner {
             new Company("Annat företag")
         );
 
-        System.out.println(companies.size());
-
         companyRepository.saveAll(companies);
     }
 }

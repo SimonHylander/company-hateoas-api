@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
@@ -23,5 +24,6 @@ public class Company {
 
     @NonNull
     @Column(name = "name")
+    @NotNull
     private String name;
 }

@@ -4,25 +4,28 @@ package com.shy.company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.hateoas.*;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/company")
+@RequestMapping("/companies")
 public class CompanyController {
 
     @Autowired
     private CompanyRepository repository;
+
+    @Autowired
+    private CompanyService service;
 
     @Autowired
     private CompanyResourceAssembler assembler;
@@ -57,8 +60,8 @@ public class CompanyController {
         return rootResource;
     }*/
 
-    @GetMapping("/all")
-    ResponseEntity<Resources<Resource<CompanyResource>>> all() {
+    @GetMapping("/")
+    public ResponseEntity<Resources<Resource<CompanyResource>>> findAll() {
         CompanyResource p1 = new CompanyResource("Apfelstrudel");
         CompanyResource p2 = new CompanyResource("Schnitzel");
 
@@ -74,10 +77,44 @@ public class CompanyController {
         return ResponseEntity.ok(resources);
     }
 
-    /*@GetMapping("/{id}")
-    public ResponseEntity<Resources<Resource<Company>>> get(@RequestParam(value = "id", required = true, defaultValue = "") Long id) {
-        return new ResponseEntity.ok(
-                assembler.toResource(repository.findById(id));
+    @GetMapping("/{id}")
+    public ResponseEntity<CompanyResource> findOneTwo(@PathVariable UUID id) {
+        return ResponseEntity.ok(assembler.toResource(service.findById(id)));
+    }
+
+    /**
+     * Returns hateoas Resource object.
+     * This version doesn't require an entity resource.
+     */
+    @GetMapping("/v2/{id}")
+    public Resource<Company> findOne(@PathVariable UUID id) {
+        System.out.println(id.toString());
+
+        Resource<Company> resource = new Resource<>(service.findById(id));
+
+        resource.add(
+                linkTo(methodOn(CompanyController.class).findOne(id)).withSelfRel()
         );
+
+        return resource;
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<CompanyResource> newCompany(@RequestBody Company company) {
+        Company savedCompany = repository.save(company);
+
+        return ResponseEntity
+                .created(linkTo(methodOn(CompanyController.class).findOne(savedCompany.getUniqueId())).toUri())
+                .body(assembler.toResource(savedCompany));
+    }
+
+    /*@RequestMapping(method = RequestMethod.GET, value = "/{simpleEntityId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<FileDatastore> getSimpleEntity(@PathVariable UUID simpleEntityId)     {
+        SimpleEntity record = this.repository.findOneByUuid(simpleEntityId);
+        HttpHeaders headers = new HttpHeaders();
+
+        HttpStatus status = (record != null) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+
+        return new ResponseEntity<>(record, headers, status);
     }*/
 }
