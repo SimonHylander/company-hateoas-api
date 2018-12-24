@@ -78,18 +78,19 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CompanyResource> findOneTwo(@PathVariable UUID id) {
-        return ResponseEntity.ok(assembler.toResource(service.findById(id)));
+    public ResponseEntity<CompanyResource> findOne(@PathVariable UUID id) {
+        return repository.findById(id)
+                .map(assembler::toResource)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     /**
      * Returns hateoas Resource object.
-     * This version doesn't require an entity resource.
+     * This version doesn't require an entity resource object.
      */
     @GetMapping("/v2/{id}")
-    public Resource<Company> findOne(@PathVariable UUID id) {
-        System.out.println(id.toString());
-
+    public Resource<Company> findOneTwo(@PathVariable UUID id) {
         Resource<Company> resource = new Resource<>(service.findById(id));
 
         resource.add(
@@ -108,13 +109,9 @@ public class CompanyController {
                 .body(assembler.toResource(savedCompany));
     }
 
-    /*@RequestMapping(method = RequestMethod.GET, value = "/{simpleEntityId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<FileDatastore> getSimpleEntity(@PathVariable UUID simpleEntityId)     {
-        SimpleEntity record = this.repository.findOneByUuid(simpleEntityId);
-        HttpHeaders headers = new HttpHeaders();
-
-        HttpStatus status = (record != null) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-
-        return new ResponseEntity<>(record, headers, status);
-    }*/
+    @PutMapping("/{id}")
+    public ResponseEntity<CompanyResource> updateCompany(@PathVariable UUID id, @RequestBody Company company) {
+        Company updatedCompany = repository.save(company);
+        return ResponseEntity.ok(assembler.toResource(service.findById(id)));
+    }
 }

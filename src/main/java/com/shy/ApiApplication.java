@@ -2,8 +2,10 @@ package com.shy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+@ComponentScan
 public class ApiApplication {
 	// https://github.com/spring-projects/spring-hateoas-examples/tree/master/hypermedia/src/main/java/org/springframework/hateoas/examples
 

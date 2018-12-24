@@ -20,8 +20,11 @@ class CompanyResourceAssembler extends ResourceAssemblerSupport<Company, Company
 
     @Override
     public CompanyResource toResource(Company company) {
-        CompanyResource resource = new CompanyResource(company.getName());
-        //CompanyResource resource = super.createResourceWithId(entity.getUniqueId(), entity);
+        System.out.println(company.getUniqueId());
+        CompanyResource resource = super.createResourceWithId(company.getUniqueId(), company);
+
+        //Not working
+        //BeanUtils.instantiateClass(resourceType);
 
         resource.add(
                 linkTo(methodOn(CompanyController.class).findOne(company.getUniqueId())).withSelfRel()
