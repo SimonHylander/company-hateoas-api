@@ -19,8 +19,8 @@ public class DatabaseInitializer implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         List<Company> companies = Arrays.asList(
-            new Company("Mitt företag"),
-            new Company("Annat företag")
+            new Company("12345", "Mitt företag", "Beskrivning"),
+            new Company("678910", "Annat företag", "Beskrivning..")
         );
 
         companyRepository.saveAll(companies);

@@ -1,20 +1,37 @@
 package com.shy.company;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.core.Relation;
 
+@Data
 @Getter
+@AllArgsConstructor
+@RequiredArgsConstructor
+@NoArgsConstructor
+@Relation(value = "company", collectionRelation = "companies")
 public class CompanyResource extends ResourceSupport {
 
+    private String uniqueId;
+
+    @NonNull
+    @JsonProperty("organisation_number")
+    private String organisationNumber;
+
+    @JsonProperty("name")
+    @NonNull
     private String name;
 
-    @JsonCreator
-    public CompanyResource(@JsonProperty("company") String name) {
-        this.name = name;
-    }
+    @JsonProperty("description")
+    @NonNull
+    private String description;
 
     @Override
     public void add(Link link) {
