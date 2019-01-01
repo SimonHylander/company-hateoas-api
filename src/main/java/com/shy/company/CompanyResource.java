@@ -22,14 +22,11 @@ public class CompanyResource extends ResourceSupport {
     private String uniqueId;
 
     @NonNull
-    @JsonProperty("organisation_number")
     private String organisationNumber;
 
-    @JsonProperty("name")
     @NonNull
     private String name;
 
-    @JsonProperty("description")
     @NonNull
     private String description;
 

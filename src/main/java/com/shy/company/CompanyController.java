@@ -7,6 +7,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,7 +52,7 @@ public class CompanyController {
         return resource;
     }*/
 
-    @PostMapping(value = "/", produces = MediaTypes.HAL_JSON_VALUE)
+    @PostMapping(produces = MediaTypes.HAL_JSON_VALUE, consumes = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<CompanyResource> newCompany(@RequestBody Company company) {
         Company savedCompany = repository.save(company);
 
@@ -76,8 +77,8 @@ public class CompanyController {
         return ResponseEntity.ok(assembler.toResource(service.findById(id)));
     }
 
-    @PatchMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<CompanyResource> updateCompany2(@PathVariable UUID id, @RequestBody CompanyResource companyResource) {
+    /*@PatchMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<?> updateCompany2(@PathVariable UUID id, @RequestBody Map<String, Object> resource) {
         Optional<Company> existingCompany = repository.findById(id);
 
         if(!existingCompany.isPresent())
@@ -90,5 +91,5 @@ public class CompanyController {
         });
 
         return ResponseEntity.ok(assembler.toResource(service.findById(id)));
-    }
+    }*/
 }

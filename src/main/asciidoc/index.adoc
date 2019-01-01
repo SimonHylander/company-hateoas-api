@@ -1,0 +1,205 @@
+= API Guide
+HATEOAS API;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+[[overview]]
+= Overview
+
+[[overview-http-verbs]]
+== HTTP verbs
+
+We try to adhere as closely as possible to standard HTTP and REST conventions in its
+use of HTTP verbs.
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource
+
+| `POST`
+| Used to create a new resource
+
+| `PATCH`
+| Used to update an existing resource, including partial updates
+
+| `DELETE`
+| Used to delete an existing resource
+|===
+
+RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its
+use of HTTP status codes.
+
+|===
+| Status code | Usage
+
+| `200 OK`
+| The request completed successfully
+
+| `201 Created`
+| A new resource has been created successfully. The resource's URI is available from the response's
+`Location` header
+
+| `204 No Content`
+| An update to an existing resource has been applied successfully
+
+| `400 Bad Request`
+| The request was malformed. The response body will include an error providing further information
+
+| `404 Not Found`
+| The requested resource did not exist
+|===
+
+[[overview-hypermedia]]
+== Hypermedia
+
+RESTful Notes uses hypermedia and resources include links to other resources in their
+responses. Responses are in http://stateless.co/hal_specification.html[Hypertext Application
+from resource to resource.
+Language (HAL)] format. Links can be found beneath the `_links` key. Users of the API should
+not create URIs themselves, instead they should use the above-described links to navigate
+
+[[resources]]
+= Resources
+
+[[resources-root]]
+== Entry point
+
+The entry point into the service.
+
+[[resources-root-access]]
+=== Accessing the entry point
+
+A `GET` request is used to access the entry point
+
+[[resources-root-fields]]
+==== Response fields
+include::{snippets}/root/response-fields.adoc[]
+
+[[resources-root-response]]
+==== Example response
+include::{snippets}/root/http-response.adoc[]
+
+[[resources-root-links]]
+==== Links
+include::{snippets}/root/links.adoc[]
+
+
+[[resources-company]]
+== Company
+The company resource is used to retrieve, update, and delete individual companies.
+
+
+[[resources-company-list]]
+=== Listing companies
+A `GET` request will list all of the companies.
+
+[[resources-company-list-fields]]
+==== Response fields
+include::{snippets}/company-list/response-fields.adoc[]
+
+[[resources-company-list-request]]
+==== Example request
+include::{snippets}/company-list/curl-request.adoc[]
+
+[[resources-company-list-response]]
+==== Example response
+include::{snippets}/company-list/http-response.adoc[]
+
+
+[[resources-company-get]]
+=== Retrieving a company
+A `GET` request will retrieve the details of a company.
+
+[[resources-company-get-fields]]
+==== Response fields
+include::{snippets}/company-get/response-fields.adoc[]
+
+[[resources-company-get-request]]
+==== Example request
+include::{snippets}/company-get/curl-request.adoc[]
+
+[[resources-company-get-response]]
+==== Example response
+include::{snippets}/company-get/http-response.adoc[]
+
+
+[[resources-company-create]]
+=== Creating a company
+A `POST` request is used to create a company.
+
+[[resources-company-create-fields]]
+==== Request fields
+include::{snippets}/company-create/request-fields.adoc[]
+
+[[resources-company-create-request]]
+==== Example request
+include::{snippets}/company-create/curl-request.adoc[]
+
+[[resources-company-create-response]]
+==== Example response
+include::{snippets}/company-create/http-response.adoc[]
+
+
+
+[[resources-company-update]]
+=== Updating a company
+A `PATCH` request is used to update a company.
+
+[[resources-company-update-fields]]
+==== Response fields
+include::{snippets}/company-update/response-fields.adoc[]
+
+[[resources-company-update-request]]
+==== Example request
+include::{snippets}/company-update/curl-request.adoc[]
+
+[[resources-company-update-response]]
+==== Example response
+include::{snippets}/company-update/http-response.adoc[]
+
+
+
+
+
+[[resources-company-links]]
+=== Links
+
+|===
+| Relation | Description
+
+| `self`
+| this company
+
+|===
+
+[[resources-company-get]]
+=== Retrieve a company
+A GET request will retrieve the details of a company
+
+[[resources-company-response-fields]]
+=== Response fields
+
+|===
+| Path | Type | Description
+
+| `name`
+| `String`
+| `The name of the company`
+
+| `_links`
+| `Object`
+| `Links to other resources`
+
+|===
+
+[[resources-company-example-request]]
+=== Example request
+
+[[resources-company-example-response]]
+=== Example response
