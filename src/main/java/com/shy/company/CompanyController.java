@@ -1,5 +1,7 @@
 package com.shy.company;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.*;
@@ -7,7 +9,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -77,19 +78,23 @@ public class CompanyController {
         return ResponseEntity.ok(assembler.toResource(service.findById(id)));
     }
 
-    /*@PatchMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<?> updateCompany2(@PathVariable UUID id, @RequestBody Map<String, Object> resource) {
+    @PatchMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<?> updateCompanyPatch(@PathVariable UUID id, @RequestBody CompanyResource companyResource) {
         Optional<Company> existingCompany = repository.findById(id);
 
         if(!existingCompany.isPresent())
             return ResponseEntity.notFound().build();
 
-        existingCompany.map(company -> {
-            BeanUtils.copyProperties(companyResource, company);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration()
+                .setSkipNullEnabled(true)
+                .setMatchingStrategy(MatchingStrategies.STRICT);
 
-            return repository.save(company);
-        });
+        Company company = existingCompany.get();
+        modelMapper.map(companyResource, company);
+
+        repository.save(company);
 
         return ResponseEntity.ok(assembler.toResource(service.findById(id)));
-    }*/
+    }
 }
